@@ -1,9 +1,9 @@
-
-
-
-
 $(document).on("click", "#get-btn", function() {
   $("#articles").empty();
+
+
+
+
 
   $.ajax({
     method: "GET",
@@ -30,3 +30,19 @@ $(document).on("click", "#get-btn", function() {
       console.log(err);
     })
 });
+
+
+$(document).on("click", "#clear-btn", function() {
+  $.ajax({
+    method:"DELETE",
+    url: "/api/delete"
+  })
+    .then(function(data) {
+      location.reload(true);
+    })
+    .catch(function(err) {
+      console.log(err);
+    })
+
+  
+})

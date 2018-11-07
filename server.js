@@ -38,15 +38,19 @@ app.get("/scrape", function(req, res) {
       result.link = $(element).children("a").attr("href");
       result.blurb = $(element).parent("div").children(".blurb").text();
 
-      db.Article
-        .create(result)
-        .then(function(dbArticle) {
-          res.json(dbArticle);
-        })
-        .catch(function(err) {
-          console.log(err);
-          res.status(500).json(err);
-        })
+      if (result.title && result.link && result.blurb !== "") {
+
+        db.Article
+          .create(result)
+          .then(function(dbArticle) {
+            res.json(dbArticle);
+          })
+          .catch(function(err) {
+            console.log(err);
+            res.status(500).json(err);
+          })
+
+        }
     });
 
     res.send("Scrape Complete");
