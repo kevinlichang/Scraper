@@ -102,6 +102,19 @@ app.post("/articles/:id", (req, res) => {
 
 });
 
+app.delete("/api/delete", (req, res) => {
+  // delete all articles from db
+  db.Article
+    .remove({})
+    .then(function(dbArticle) {
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
 app.listen(PORT, function() {
   console.log(`App running on port ${PORT}!`);
 })
