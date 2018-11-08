@@ -5,9 +5,7 @@ const Schema = mongoose.Schema;
 
 // create a new NoteSchema object
 const NoteSchema = new Schema({
-  // `title` is of type String
-  title: String,
-  // `body` is of type String
+  name: String,
   body: String
 });
 

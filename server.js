@@ -72,10 +72,10 @@ app.get("/articles", function (req, res) {
 
 // Route for grabbing a specific Article by id, populate it with it's note
 app.get("/articles/:id", (req, res) => {
-  // Using the id passed in the id parameter, prepare a query that finds the matching one in our db...
-  db.Article.findOne({ _id: req.params.id })
+  db.Article
+    .findOne({ _id: req.params.id })
 
-    .populate("note")
+    .populate("notes")
     .then(function(dbArticle) {
 
       res.json(dbArticle);
@@ -108,6 +108,19 @@ app.delete("/api/delete", (req, res) => {
     .remove({})
     .then(function(dbArticle) {
       res.json(dbArticle);
+    })
+    .catch(function(err) {
+      console.log(err);
+      res.status(500).json(err);
+    });
+});
+
+app.delete("/api/delete-comment/:id", (req, res) => {
+  // delete all articles from db
+  db.Note
+    .remove({_id: req.params.id})
+    .then(function(dbNote) {
+      res.json(dbNote);
     })
     .catch(function(err) {
       console.log(err);
