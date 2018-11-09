@@ -8,7 +8,7 @@ const cheerio = require("cheerio");
 // Require all models
 const db = require("./models");
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Initialize Express
 const app = express();
@@ -26,8 +26,8 @@ const databaseUri = "mongodb://localhost/mongoHeadlines";
 
 
 // Connect to the Mongo DB
-if (process.env.MONGODB_OLIVE_URI) {
-  mongoose.connect(process.env.MONGODB_OLIVE_URI, { useNewUrlParser: true });
+if (process.env.MONGODB_URI) {
+  mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
 } else {
   mongoose.connect(databaseUri, { useNewUrlParser: true });
 }
