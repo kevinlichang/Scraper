@@ -9,10 +9,19 @@ $(document).ready(function() {
 
     data.forEach((result) => {
       let newCard = $("<div>").addClass("card m-3");
-      let newTitle = $("<div>").addClass("card-header").html(`<h5><strong>Title: </strong>${result.title}</h5>`);
-      let newBlurb = $("<div>").addClass("card-body").text(result.blurb);
+
+      let newTitle = $("<div>").addClass("card-header").html(`<h5><strong>Headline: </strong>${result.title}</h5>`);
+
       let articleLink = $("<a>").addClass("btn btn-outline-info m-1").attr({"href": result.link, "target": "_blank"}).text(`Click Here for Article Page`);
+
       let comments = $("<button>").addClass("btn btn-outline-info m-1 comment-btn").attr("data-id", result._id).text("Comments");
+
+      if (result.blurb == "") {
+        var newBlurb = $("<div>").addClass("card-body text-center").text("No Blurb Available");
+      } else {
+        var newBlurb = $("<div>").addClass("card-body").text(result.blurb);
+      }
+
       newCard.append(newTitle, newBlurb, articleLink, comments);
 
       $("#articles").append(newCard);

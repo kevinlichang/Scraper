@@ -22,12 +22,17 @@ app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+const databaseUri = "mongodb://localhost/mongoHeadlines";
 
 
 // Connect to the Mongo DB
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
+if (process.env.MONGODB_URI) {
+  mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
+} else {
+  mongoose.connect(databaseUri, { useNewUrlParser: true });
+}
 
+//scrape articles and save to database
 app.get("/scrape", function(req, res) {
   axios.get("https://www.washingtonpost.com/").then(function(response) {
     const $ = cheerio.load(response.data);
@@ -38,7 +43,7 @@ app.get("/scrape", function(req, res) {
       result.link = $(element).children("a").attr("href");
       result.blurb = $(element).parent("div").children(".blurb").text();
 
-      if (result.title && result.link && result.blurb !== "") {
+      // if (result.title && result.link && result.blurb !== "") {
 
         db.Article
           .create(result)
@@ -50,7 +55,6 @@ app.get("/scrape", function(req, res) {
             res.status(500).json(err);
           })
 
-        }
     });
 
     res.send("Scrape Complete");
@@ -118,7 +122,7 @@ app.delete("/api/delete", (req, res) => {
 app.delete("/api/delete-comment/:id", (req, res) => {
   // delete all articles from db
   db.Note
-    .remove({_id: req.params.id})
+    .deleteOne({_id: req.params.id})
     .then(function(dbNote) {
       res.json(dbNote);
     })
